@@ -1,4 +1,4 @@
-# Loading libraries:
+#Load libraries:
 import numpy
 import matplotlib.pyplot as plt
 import keras
@@ -6,12 +6,10 @@ from keras.datasets import mnist
 from keras.layers import Dense
 from keras.models import Sequential
 
-# Loading Dataset:
-
+#Load Dataset:
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
-# Reshaping & Reloading Dataset:
-
+#Reshaping & Reloading Dataset:
 img_rows, img_cols = 28, 28
 num_classes = 10
 
@@ -31,14 +29,14 @@ def load_dataset():
 
 x_train, x_test, y_train, y_test = load_dataset()
 
-#for i in range(3):
-#    img = x_train[i].reshape((28,28))
-#    plt.imshow(img, cmap="Greys")
-#    plt.show()
+#Plot some samples:
+for i in range(3):
+    img = x_train[i].reshape((28,28))
+    plt.imshow(img, cmap="Greys")
+    plt.show()
 
 
-# Defining model:
-
+# Define model:
 model=Sequential()
 model.add(Dense(units=128, activation='relu', input_shape=x_train[0].shape))
 model.add(Dense(units=128, activation='relu'))
@@ -50,5 +48,5 @@ print(model.summary())
 # Train model:
 model.fit(x_train, y_train, validation_data=(x_test,y_test), verbose=1, epochs=50, batch_size=128)
 
-#Saving moodel:
+#Save model:
 model.save('ANN_Model.h5')
