@@ -48,5 +48,10 @@ print(model.summary())
 # Train model:
 model.fit(x_train, y_train, validation_data=(x_test,y_test), verbose=1, epochs=50, batch_size=128)
 
+#Evaluate Model:
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Loss :', score[0] , '%')
+print('Accuracy :', score[1]*100, '%')
+
 #Save model:
 model.save('ANN_Model.h5')
