@@ -1,15 +1,15 @@
 # Handwritten digit recognition with Keras, SVM, and OpenCV
-With MNIST data set, machine learning was used to read single handwritten digits. Now we are able to extend that to reading multiple digits as shown below. The underlying neural network does digit classification. We used OpenCV contours to detect numbers in picture. This can be quite useful in a variety of ML applications like reading labels in the store, license plates, advertisements etc. But if you are looking for more reliable techniques you should use SSD, YOLO and etc.
+With MNIST data set, machine learning was used to read single handwritten digits. Now we can extend that to reading multiple digits, as shown below. The underlying neural network does digit classification. We used OpenCV contours to detect numbers in the picture. This can be quite useful in various ML applications like reading labels in the store, license plates, advertisements, etc. But if you are looking for more reliable techniques, you should use SSD, YOLO, etc.
 
 ![image](result.jpg)
 
 ## Project structure
-I used two separate model for digit recognition: DNN using Keras, and SVM using Sklearn. The DNN is done using a CNN with convolution, maxpool and FC layers that classify each detected region into 10 different digits. The classifier showed 95% accuracy on the test set. Multi-class linear SVM is using HOG features and got 92% accuracy on the test set. We tested the repo on a variety of examples and found that they works quite well.
+Separate models prepared for digit recognition: DNN using Keras and SVM using Sklearn. The DNN is done using a CNN with convolution, maxpool, and FC layers that classify each detected region into ten different digits. The classifier showed 95% accuracy on the test set. Multi-class linear SVM uses HOG features and got 92% accuracy on the test set. We tested the repo on various examples and found that they work pretty well.
 
-Here, we will implement the following steps. Each step performed in a separate python file that is mentionad after each step colorized with red. Following steps describe code step by step. 
+Here, we will implement the following steps—each step performed in a separate python file that is mentioned after each step colorized with red. The next steps describe code step by step. 
 
 ## Install required packages
-Using pip you can install required packages for this project easily. Go to project directory and run following command:
+Using pip you can install the required packages for this project easily. Go to the project directory and run the following command:
 ```
 pip install -r requirements.txt
 ```
@@ -29,14 +29,14 @@ from collections import Counter
 from sklearn.datasets import fetch_openml
 ```
 
-We will use thejoblib package to save the classifier in a file so that we can use the classifier again without performing training each time. Calculating HOG features for 70000 images is a costly operation, so we will save the classifier in a file and load it whenever we want to use it. As discussed above sklearn.datasets package will be used to download the MNIST database for handwritten digits. We will use skimage.feature.hog class to calculate the HOG features and sklearn.svm.LinearSVC class to perform prediction after training the classifier. We will store our HOG features and labels in numpy arrays. The next step is to download the dataset using the sklearn.datasets.fetch_openml function. For the first time, it will take some time as 55.4 MB will be downloaded.
+We will use the joblib package to save the classifier in a file to use the classifier again without performing training each time. Calculating HOG features for 70000 images is costly, so we will save the classifier in a file and load it whenever we want to use it. As mentioned, Datasets package will be used to download the MNIST database for handwritten digits. We will use skimage.feature.hog class to calculate the HOG features and sklearn.svm.LinearSVC class to perform prediction after training the classifier. We will store our HOG features and labels in numpy arrays. The next step is to download the dataset using the sklearn.datasets.fetch_openml function. It will take some time as 55.4 MB will be downloaded for the first time.
 
 ```python
 # Load the dataset
 dataset = fetch_openml('mnist_784')
 ```
 
-Once, the dataset is downloaded we will save the images of the digits in a numpy array features and the corresponding labels i.e. the digit in another numpy array labels as shown below –
+Once the dataset is downloaded, we will save the images of the digits in a NumPy array features and the corresponding labels, i.e., the number in another NumPy array labels as shown below –
 
 ```python
 # Extract the features and labels
@@ -44,7 +44,7 @@ features = np.array(dataset.data, 'int16')
 labels = np.array(dataset.target, 'int')
 ```
 
-Next, we calculate the HOG features for each image in the database and save them in another numpy array named hog_feature.
+Next, we calculate the HOG features for each image in the database and save them in another NumPy array named hog_feature.
 
 ```python
 # Extract the hog features
@@ -55,9 +55,9 @@ list_hog_fd.append(fd)
 hog_features = np.array(list_hog_fd, 'float64')
 ```
 
-In line 17 we initialize an empty list list_hog_fd, where we append the HOG features for each sample in the database. So, in the for loop in line 18, we calculate the HOG features and append them to the list list_hog_fd. Finally, we create an numpy array hog_features containing the HOG features which will be used to train the classifier. This step will take some time, so be patient while this piece of code finishes.
+In line 17 we initialize an empty list list_hog_fd, where we append the HOG features for each sample in the database. So, in the for loop in line 18, we calculate the HOG features and append them to the list list_hog_fd. Finally, we create a NumPy array of hog_features containing the HOG features, which will be used to train the classifier. This step will take some time, so be patient while this piece of code finishes.
 
-To calculate the HOG features, we set the number of cells in each block equal to one and each individual cell is of size 14×14. Since our image is of size 28×28, we will have four blocks/cells of size 14×14 each. Also, we set the size of orientation vector equal to 9. So our HOG feature vector for each sample will be of size 4×9 = 36. We are not interesting in visualizing the HOG feature image, so we will set the visualise parameter to false.
+To calculate the HOG features, we set the number of cells in each block equal to one, and each cell is of size 14×14. Since our image is of size 28×28, we will have four blocks/cells of size 14×14 each. Also, we set the length of the orientation vector equal to 9. So our HOG feature vector for each sample will be of size 4×9 = 36. We are not interested in visualizing the HOG feature image, so we will set the visualize parameter to false.
 
 ### Step 2:
 Train a multi-class linear SVM with the HOG features of each sample along with the corresponding label, then save generated model into a .pkl file – trainSVM.py
